@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuentos para Niños</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: #f0f9ff;
+        }
+        .storybook-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .storybook-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 24px 6px #ffe066, 0 4px 16px rgba(0,0,0,0.10);
+        }
+        /* Efecto de resplandor y sombra al seleccionar */
+        .glow-selected {
+            box-shadow: 0 0 32px 12px #ffe066, 0 8px 32px rgba(0,0,0,0.18);
+            border: 2px solid #ffe066;
+            transition: box-shadow 0.4s, border 0.4s;
+        }
+        /* Animación flip */
+        .flip-card {
+            perspective: 800px;
+        }
+        .flip-animate {
+            animation: flipCard 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes flipCard {
+            0% {
+                transform: rotateY(0deg) scale(1);
+            }
+            40% {
+                transform: rotateY(90deg) scale(1.12);
+            }
+            60% {
+                transform: rotateY(90deg) scale(1.12);
+            }
+            100% {
+                transform: rotateY(0deg) scale(1);
+            }
+        }
+        /* Fade para transición entre lista y cuento */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-300 to-yellow-100">
+    <header class="bg-blue-500 text-white text-center py-8">
+        <h1 class="text-4xl font-bold">¡Cuentos Mágicos para Niños!</h1>
+        <p class="mt-2 text-lg">Descubre aventuras llenas de diversión y aprendizaje</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto py-10 px-4">
+        <section id="stories-list" class="mb-12 fade-in">
+            <h2 class="text-3xl font-semibold text-center text-purple-500 mb-6">Nuestros Cuentos</h2>
+            <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Las tarjetas de cuentos se generan dinámicamente -->
+            </div>
+        </section>
+
+        <section id="story-content" class="hidden rounded-lg shadow-lg p-8 fade-in" style="background-color: #fafcfb;">
+            <h2 id="story-title" class="text-3xl font-bold text-center text-purple-600 mb-4"></h2>
+            <img id="story-img" class="mx-auto mb-4 rounded shadow w-40 h-40 object-cover" alt="Miniatura del cuento" />
+            <p id="story-text" class="text-gray-700 text-lg"></p>
+            <p id="story-moral" class="text-green-700 text-base font-semibold mt-4"></p>
+            <button onclick="backToList()" class="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Volver a los cuentos</button>
+        </section>
+    </main>
+
+    <footer class="bg-blue-500 text-white text-center py-4">
+        <p>&copy; 2025 Cuentos para Niños. ¡Hecho con amor para pequeños soñadores!</p>
+    </footer>
+
+    <script>
+        // Arreglo de cuentos, cada uno con miniatura y moraleja opcional
+        const stories = [
+            {
+                id: 1,
+                title: "El Gato Valiente",
+                text: "Érase una vez un gatito llamado Max, que vivía en un pequeño pueblo rodeado de verdes colinas y árboles frondosos. Max era pequeño, de pelaje gris con manchas blancas, y siempre andaba curioseando por los rincones del bosque. Aunque los demás animales lo veían como un simple gatito, Max tenía algo especial: un corazón grande y valiente. Una tarde, mientras jugaba cerca del río, Max notó que el agua subía más de lo normal. Las lluvias de los últimos días habían hecho que el río comenzara a desbordarse. Asustado, corrió al pueblo y maulló con fuerza para llamar la atención. Pero los humanos no entendían lo que trataba de decir. Entonces, Max tuvo una idea. Fue bosque adentro y reunió a todos los animales: el castor Bruno, la ardilla Sofía, el búho Don Bú, y hasta el tímido ciervo Tomás. Les explicó lo que había visto con gestos y sonidos, y aunque al principio no le creyeron, lo siguieron hasta el río. Al ver que era cierto, todos se pusieron manos a la obra. Bruno cortaba ramas con sus fuertes dientes, Sofía aía hojas y bejucos, Tomás arrastraba troncos pesados, y Don Bú daba instrucciones desde lo alto. Max, ágil como ninguno, corría de un lado a otro organizando y animando a todos. En poco tiempo, lograron construir un puente resistente y alto, que permitía cruzar el río sin peligro. Gracias al trabajo en equipo y al liderazgo de Max, los habitantes del pueblo y los animales del bosque pudieron ponerse a salvo. El agua siguió subiendo, pero nadie resultó herido. Desde ese día, Max no fue visto solo como un simple gatito. Fue nombrado por todos como El Gato Valiente, y cada año, en el bosque, se celebra el “Día del Puente”, en honor a su valentía, ingenio y espíritu de unión.",
+                img: "assets/gatito_valiente.png",
+                moral: "Moraleja: No importa cuán pequeño seas, si actúas con valentía y trabajas en equipo, puedes lograr grandes cosas y hacer la diferencia en el mundo."
+            },
+            {
+                id: 2,
+                title: "La Estrella Fugaz",
+                text: "En un bosque encantado, donde los árboles susurraban secretos al viento y los ríos cantaban melodías antiguas, una pequeña estrellita llamada Luna cayó una noche desde el cielo. No fue una caída triste, sino más bien un suave descenso, como si el cielo mismo la hubiese enviado con una misión especial. Luna era diminuta y brillante, con una luz cálida que no quemaba, pero iluminaba con dulzura. Al despertar en el claro del bosque, miró a su alrededor confundida. No sabía cómo volver al cielo ni por qué había caído. Pero en lugar de llorar, decidió usar su brillo para hacer el bien. Esa misma noche, un grupo de conejitos no encontraba el camino de regreso a su madriguera. Luna los vio desde lo alto de una rama y descendió flotando, iluminando el sendero con su luz. Los conejitos, agradecidos, contaron la historia al resto del bosque. Pronto, todos los animales sabían de la estrellita que ayudaba en la oscuridad. Los búhos la saludaban desde las copas de los árboles, los zorros le hacían espacio en sus escondites, y las luciérnagas danzaban a su alrededor como si fuera una más de su familia. Cada noche, Luna escuchaba con atención los deseos de los animales: una ardilla que quería encontrar sus nueces perdidas, un cervatillo que temía dormir solo, un sapo que soñaba con ver las estrellas. Luna los ayudaba con su magia, con amor y sin esperar nada a cambio. Pasaron los días, y Luna sentía un leve tirón en su corazón. Era el cielo llamándola de vuelta. Los animales lo sabían. Tristes, se reunieron todos en el claro para despedirse. —No quiero dejarlos —susurró Luna—, pero el cielo me necesita. —Tú ya vives en nuestros corazones —dijo el búho sabio—. Nunca te olvidaremos. Con una sonrisa brillante, Luna subió lentamente hacia el firmamento, y justo antes de desaparecer, dejó un rastro de luz en el cielo: una constelación en forma de estrellita sonriente. Desde entonces, cada noche, los animales miran hacia arriba y encuentran en ese brillo el recuerdo de su amiga. A veces, si se escucha con atención, se oye una vocecita que susurra: “Sigue tu luz, y siempre encontrarás el camino.”",
+                img: "assets/estrella_fugaz.png",
+                moral: "Moraleja: La verdadera magia está en ayudar a los demás con bondad. Aunque te vayas, tus acciones siempre dejarán una huella en el corazón de quienes ayudaste."
+            },
+            {
+                id: 3,
+                title: "El Dragón Amistoso",
+                text: "En un amplio valle rodeado de montañas y árboles altos, vivía un dragón enorme llamado Draco. Tenía escamas brillantes como el sol, alas que cubrían el cielo cuando volaba y un rugido tan potente que hacía temblar el suelo. Pero aunque su aspecto era imponente, Draco era un dragón muy tímido y de buen corazón. Los animales del valle lo evitaban. Al verlo acercarse, salían corriendo, se escondían entre arbustos o fingían estar dormidos. Nadie se atrevía a hablarle, y eso hacía que Draco se sintiera triste y muy solo. —¿Por qué todos me temen si nunca les he hecho daño? —se preguntaba una y otra vez. Un día, mientras paseaba por el bosque, escuchó un llanto suave. Sigilosamente, se acercó y vio a un pequeño pajarito llorando al pie de un árbol. Una fuerte ráfaga de viento había destruido su nido, y todos los huevos estaban en el suelo, afortunadamente intactos. —¿Puedo ayudarte? —preguntó Draco, con voz dulce. El pajarito, temblando, dudó por un momento, pero al ver los ojos bondadosos del dragón, asintió. Entonces Draco, con muchísimo cuidado, recogió ramitas, hojas y musgo, y con sus enormes garras —más hábiles de lo que parecían— ayudó a construir un nuevo nido en la copa del árbol. Luego, colocó los huevitos dentro, uno por uno, con ternura. Desde lo alto, una ardilla observaba todo. Luego otra. Y luego un zorro. Pronto, la noticia se esparció por todo el valle: ¡Draco no era peligroso, era amable! Al día siguiente, un grupo de animales se acercó tímidamente a él. —¿Nos enseñarías a volar bajito con tus alas? —preguntó una liebre. —¿Podrías ayudarnos a mover unas piedras grandes para construir un refugio? —añadió un tejón. Draco, conmovido, aceptó encantado. Por primera vez, se sintió aceptado. No necesitó rugir, ni fingir ser valiente. Solo fue él mismo: amable, servicial y paciente. Desde ese momento, Draco se convirtió en el guardián del valle y, sobre todo, en un gran amigo para todos. Ya no volaba solo, ni rugía por tristeza. Ahora lo hacía de felicidad, mientras reía con sus nuevos compañeros.",
+                img: "assets/dragón_amistoso, .png",
+                moral: "Moraleja: No importa cuán diferente seas o cómo te vean los demás; la amabilidad y la bondad siempre abrirán puertas y corazones."
+            },
+            {
+                id: 4,
+                title: "El Árbol que Cantaba",
+                text: "En un valle vivía un árbol viejo que cantaba cuando el viento pasaba entre sus ramas. Los niños del pueblo lo amaban, pero un día, un leñador quiso cortarlo para hacer muebles. Los niños, liderados por una niña llamada Clara, se reunieron alrededor del árbol para protegerlo. Clara habló con el leñador: “Si cortas este árbol, perderemos su música”. El leñador, que no creía en la magia, se rió, pero aceptó escuchar. Cuando el viento sopló, el árbol cantó una melodía tan hermosa que el leñador se emocionó. “Nunca había oído algo así”, dijo, y decidió no cortarlo. Desde entonces, el leñador cuidó el árbol y lo visitaba con los niños para escuchar su canción. El valle se llenó de visitantes que venían a disfrutar de la música del árbol.",
+                img: "assets/arbol_que_canta.png",
+                moral: "Moraleja: La naturaleza tiene tesoros que debemos proteger."
+            },
+            {
+                id: 5,
+                title: "El Búho y el Silencio",
+                text: "Beto, un búho sabio, amaba el silencio de la noche. Pero un día, los grillos, las ranas y los pájaros comenzaron a hacer mucho ruido. Beto no podía dormir ni pensar. Decidió hablar con los animales. “El silencio es importante para escuchar nuestros corazones”, les explicó. Los animales no entendían, así que Beto los invitó a sentarse en un círculo y cerrar los ojos. En el silencio, escucharon el susurro del viento y el latido de sus corazones. Todos se sintaron en paz. Desde entonces, los animales reservaban una hora cada noche para disfrutar del silencio con Beto. El bosque se volvió un lugar más tranquilo y feliz.",
+                img: "assets/búho_y_el_silencio.png",
+                moral: "Moraleja: El silencio nos ayuda a encontrar paz y escuchar lo importante."
+            },      
+            {
+                id: 6,
+                title: "El Conejo Valiente",
+                text: "En un bosque lleno de colores vivía un conejo pequeño llamado Tito. Tito era muy tímido y siempre se escondía detrás de los arbustos cuando veía a otros animales. Un día, una ardilla llamada Lila llegó corriendo, gritando que el río se había desbordado y amenazaba con inundar el hogar de los castores. Tito temblaba de miedo, pero sabía que los castores eran sus amigos. “¡Tengo que ayudar!”, pensó. Corrió hasta el río y vio a los castores luchando contra la corriente. Sin pensarlo dos veces, Tito comenzó a llevar ramitas y piedras para reforzar la presa. Los otros animales, al verlo tan valiente, se unieron a él. Juntos, lograron detener el agua y salvar el hogar de los castores. Esa noche, los castores organizaron una fiesta para Tito. “Eres pequeño, pero tienes un corazón gigante”, le dijo el jefe castor. Desde entonces, Tito nunca volvió a esconderse y se convirtió en el héroe del bosque.",
+                img: "assets/conejo_valiente.png",
+                moral: "Moraleja: El valor no depende del tamaño, sino del corazón."
+            },
+            {
+                id: 7,
+                title: "El Dragón y la Mariposa",
+                text: "Draco, un dragón pequeño, vivía en una cueva y soñaba con volar alto, pero sus alas eran demasiado débiles. Un día, una mariposa llamada Iris lo vio y se acercó. “¡Yo puedo ayudarte!”, dijo. Draco se rió: “¿Tú? Eres tan pequeña”. Iris le enseñó a Draco cómo mover sus alas con suavidad, siguiendo el ritmo del viento. Practicaron juntos durante días, y Draco aprendió a volar más alto cada vez. Una tarde, cuando un águila amenazó a Iris, Draco voló rápido y la salvó con un soplido de fuego suave. Desde entonces, Draco e Iris fueron inseparables. Draco nunca olvidó que, aunque era pequeño, Iris le había dado una gran lección.",
+                img: "assets/Dragón_y_la_Mariposa.png",
+                moral: "Moraleja: Todos, sin importar su tamaño, tienen algo valioso que enseñar."
+            },
+            {
+                id: 8,
+                title: "El Erizo y la Luna",
+                text: "Púas, un erizo curioso, miraba la luna cada noche y quería ser su amigo. “Es tan grande y brillante”, decía. Una noche, la luna pareció acercarse al suelo, y Púas corrió hacia un claro para hablarle. “¡Luna, quiero ser tu amigo!”, gritó. La luna, que en realidad era un reflejo en un charco, no respondió. Púas se sintió triste, pero una luciérnaga llamada Lulú apareció y dijo: “La luna siempre está contigo, ¡mira su luz en el charco!”. Púas entendió que la luna no necesitaba hablar para ser su amiga. Desde entonces, Púas visitaba el charco cada noche para ver a la luna y charlar con Lulú. El claro se convirtió en un lugar de amistad y magia.",
+                img: "assets/El_Erizo_y_la_Luna.png",
+                moral: "Moraleja: La amistad puede encontrarse en los lugares más simples."
+            },
+            {
+                id: 9,
+                title: "El Pez que Soñaba con el Cielo",
+                text: "Burbujas, un pez dorado, vivía en un lago y miraba las nubes con envidia. “Quiero tocar el cielo”, decía. Sus amigos peces se reían, pero una tortuga sabia llamada Tuga le dijo: “El cielo está más cerca de lo que crees”. Una noche, una lluvia de estrellas iluminó el lago, y Burbujas nadó hacia la superficie. Al saltar, vio su reflejo en el agua, rodeado de estrellas. “¡El cielo está aquí!”, exclamó. Tuga sonrió: “A veces, lo que buscas está en tu propio mundo”. Burbujas dejó de envidiar las nubes y comenzó a disfrutar de su lago, compartiendo su alegría con otros peces. El lago se convirtió en un lugar mágico donde todos veían el cielo reflejado.",
+                img: "assets/El_Pez_Soñador.png",
+                moral: "Moraleja: La felicidad está en apreciar lo que tienes."
+            },
+            {
+                id: 10,
+                title: "El Zorro y la Nube",
+                text: "Zack, un zorro astuto, quería atrapar una nube para tener su propia lluvia. Subió a la montaña más alta, pero las nubes estaban demasiado lejos. Una nube pequeña, llamada Nívea, lo vio y bajó a hablarle. “¿Por qué quieres atraparme?”, preguntó. Zack explicó que quería lluvia para regar las flores de su jardín. Nívea, conmovida, decidió ayudar. Llovió suavemente sobre el jardín de Zack, y las flores crecieron más hermosas que nunca. Zack agradeció a Nívea y prometió no intentar atraparla nunca más. Desde entonces, Zack cuidó su jardín y siempre saludaba a las nubes, agradecido por su ayuda.",
+                img: "assets/El_Zorro_y_la_Nube.png",
+                moral: "Moraleja: La generosidad trae más alegría que poseer algo."
+            },
+            {
+                id: 11,
+                title: "La Estrella Curiosa",
+                text: "En el cielo brillaba Estelita, una estrella pequeña que siempre miraba hacia la Tierra con curiosidad. “¿Qué hay allá abajo?”, se preguntaba. Una noche, decidió bajar a explorar. Cayó suavemente en un prado y conoció a un grillo llamado Pepe, que tocaba música con sus patas. Pepe le mostró los árboles, los ríos y las flores, pero Estelita notó que los animales parecían tristes. “Es porque no hay luz en la noche, y tienen miedo”, explicó Pepe. Estelita tuvo una idea: pidió a sus amigas estrellas que brillaran más fuerte. El cielo se iluminó tanto que los animales comenzaron a bailar y reír. Cuando Estelita regresó al cielo, prometió brillar cada noche para que nadie tuviera miedo. Desde entonces, las estrellas iluminan el mundo, y Estelita siempre sonríe al ver a sus amigos felices.",
+                img: "assets/estrella_curiosa.png",
+                moral: "Moraleja: Una pequeña acción puede iluminar la vida de muchos."
+            },
+            {
+                id: 12,
+                title: "La Hormiga Viajera",
+                text: "Miga, una hormiga aventurera, quería conocer el mundo más allá de su hormiguero. Sus hermanas le decían que era peligroso, pero Miga no les hizo caso. Empacó una hoja con migajas y partió. En su viaje, conoció a un saltamontes que le enseñó a saltar, a una abeja que le mostró cómo encontrar flores, y a un escarabajo que le habló de las estrellas. Miga regresó al hormiguero con historias increíbles y enseñó a sus hermanas lo que aprendió. El hormiguero se llenó de saltos, flores y charlas sobre las estrellas. Miga demostró que explorar puede traer cosas maravillosas para compartir.",
+                img: "assets/La_Hormiga_Viajera.png",
+                moral: "Moraleja: La curiosidad puede abrir un mundo de maravillas."
+            },
+            {
+                id: 13,
+                title: "La Rana y el Arcoíris",
+                text: "Rita, una rana verde, vivía cerca de un estanque y soñaba con tocar un arcoíris. Un día, después de una lluvia, apareció un arcoíris brillante. Rita saltó de nenúfar en nenúfar, pero el arcoíris siempre parecía lejos. Cansada, se sentó en una roca y lloró. Un pájaro llamado Pipo la vio y le dijo: “El arcoíris no se toca, pero puedes llevar sus colores”. Pipo le regaló plumas de todos los colores del arcoíris, y Rita las usó para decorar su estanque. Los animales del bosque vinieron a ver la belleza del estanque de Rita, y ella se dio cuenta de que no necesitaba tocar el arcoíris para tener su magia. Desde entonces, Rita fue la rana más feliz del bosque.",
+                img: "assets/la_rana_y_el_arcoiris.png",
+                moral: "Moraleja: La belleza está en lo que creas con lo que tienes."
+            }
+
+
+            // Puedes agregar más cuentos aquí siguiendo el mismo formato
+        ];
+
+        // Genera las tarjetas de cuentos dinámicamente
+        function renderStories() {
+            const grid = document.getElementById('stories-grid');
+            grid.innerHTML = '';
+            stories.forEach(story => {
+                const card = document.createElement('div');
+                card.className = "storybook-card flip-card bg-white rounded-lg shadow-lg p-6 text-center flex flex-col items-center";
+                card.innerHTML = `
+                    <img src="${story.img}" alt="Miniatura de ${story.title}" class="w-32 h-32 object-cover rounded mb-4 shadow">
+                    <h3 class="text-2xl font-bold text-blue-600">${story.title}</h3>
+                    <p class="mt-2 text-gray-600">${story.text.substring(0, 60)}...</p>
+                    <button class="mt-4 bg-yellow-400 text-white py-2 px-4 rounded hover:bg-yellow-500 leer-cuento-btn">Leer cuento</button>
+                `;
+                // Efecto de resplandor, flip y fade al hacer clic
+                card.querySelector('.leer-cuento-btn').addEventListener('click', function() {
+                    card.classList.add('glow-selected', 'flip-animate');
+                    // Fade out lista
+                    const list = document.getElementById('stories-list');
+                    list.classList.remove('fade-in');
+                    list.classList.add('fade-out');
+                    setTimeout(() => {
+                        showStory(story.id);
+                        card.classList.remove('glow-selected', 'flip-animate');
+                        list.classList.add('hidden');
+                        list.classList.remove('fade-out');
+                    }, 500);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function showStory(id) {
+            const story = stories.find(s => s.id === id);
+            document.getElementById('story-title').innerText = story.title;
+            document.getElementById('story-text').innerText = story.text;
+            document.getElementById('story-img').src = story.img;
+            document.getElementById('story-img').alt = `Miniatura de ${story.title}`;
+            document.getElementById('story-moral').innerText = story.moral ? story.moral : '';
+
+            const content = document.getElementById('story-content');
+            content.classList.remove('hidden');
+            content.classList.remove('fade-out');
+            setTimeout(() => {
+                content.classList.add('fade-in');
+            }, 10);
+        }
+
+        function backToList() {
+            const content = document.getElementById('story-content');
+            content.classList.remove('fade-in');
+            content.classList.add('fade-out');
+            setTimeout(() => {
+                content.classList.add('hidden');
+                content.classList.remove('fade-out');
+                const list = document.getElementById('stories-list');
+                list.classList.remove('hidden');
+                setTimeout(() => {
+                    list.classList.add('fade-in');
+                }, 10);
+            }, 500);
+        }
+
+        // Renderiza los cuentos al cargar la página
+        renderStories();
+    </script>
+</body>
+</html>

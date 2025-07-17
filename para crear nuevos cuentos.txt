@@ -1,0 +1,7 @@
+{
+ id: 14,
+ title: "aqui titulo del cuento",
+ text: "aqui el desarollo del cuento",
+ img: "aqui la miniatura, ejemplo.png",
+ moral: "Moraleja: aqui la moraleja"
+},
